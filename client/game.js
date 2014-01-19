@@ -1,8 +1,12 @@
 (function () {
-	/* Create a new instance of a Game 
+	/* Create a new instance of a Game. I've locked down all the props on
+	 * this so Scandi doesn't fuck them up.
+	 *
 	 * @param opts:
 	 *	-validateStateChange: a function  which validates a turn based on
 	 *   the current game state
+	 *  -pathname [optional]: a url where all game requests should be 
+	 *   directed. This defaults to the window's basepath
 	 */
 	var Game = window.Game = function (opts) {
 		if(opts === undefined) {
@@ -18,7 +22,7 @@
 		var _state = {};
 		var _hasChanged = false;
 		var _history = {verified: [], unverified: []};
-		var _url = window.location.pathname;
+		var _url = opts.pathname || window.location.pathname;
 		var _validateStateChange = opts.validateStateChange;
 
 		Object.defineProperty(this, 'state', {
@@ -92,9 +96,11 @@
 						break;
 						case 205:
 							//reset state, bad update given
+							this.onServerStateRefusal();
 							this.state = response
 						break;
 						default:
+							this.onServerError();
 						break;
 
 					}
@@ -105,5 +111,4 @@
 			return false;
 		}
 	}
-
 }())
