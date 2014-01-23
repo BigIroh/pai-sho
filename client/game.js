@@ -2,7 +2,8 @@
 	/* Create a new instance of a Game. I've locked down all the props on
 	 * this so Scandi doesn't fuck them up.
 	 *
-	 * @param opts:
+	 * @param {object} opts:
+	 *  -state: the initial state of the game.  must be jsonable
 	 *	-validateStateChange: a function  which validates a turn based on
 	 *   the current game state
 	 *  -pathname [optional]: a url where all game requests should be 
@@ -68,47 +69,47 @@
 			writable: false,
 			enumerable: true
 		});
+
+		this.state = opts.state;
 	}
 
 	/* Applies an update to the client and the server's game state.
 	 * If the server disagrees, the client state will updated to match
 	 * the server's.
 	 *
-	 * @param update: a piece of an object to merge in to the state
+	 * @param {object} update: a piece of state to merge in to the state
 	 *
-	 * @return success: a boolean if the client validates the update.
+	 * @return {boolean} success: client validates the update?
 	 */
 	Game.prototype.applyStateChange = function (update) {
 		var newState = this.state.clone().absorb(update);
 
-		if(this.validateStateChange(newState)) {
-			
+		var applyStateError;
+		try {
+			this.validateStateChange(this.state, newState) 
+			applyStateError = false;
+		}
+		catch(err) {
+			console.error(e.stack);
+			applyStateError = err;
+		}
+
+		if(!applyStateError) {
 			this.history.unverified.push(newState);
-
-			http.post({
-				url: this.url, 
-				data: update,
-				done: function (status, response) {
-					this.history.unverified.remove(newState);
-					switch(status) {
-						case 200:
-							this.history.verified.push(newState);
-						break;
-						case 205:
-							//reset state, bad update given
-							this.onServerStateRefusal();
-							this.state = response
-						break;
-						default:
-							this.onServerError();
-						break;
-
-					}
-				}.bind(this)
-			});
+			
 		}
 		else {
-			return false;
+			this.onBadMove(applyStateError);
 		}
+	}
+
+	/* Default handler for when applyStateChange throws an error.  Ideally this
+	 * will be overridden with some nice client facing code
+	 *
+	 * @param {error} err: An Error thrown by applyStateChange
+	 */
+	Game.prototype.onBadMove = function (err) {
+		alert(err.message);
+		console.error("Please pass onBadMove as a param when you make a new game!\n", err.stack);
 	}
 }())
