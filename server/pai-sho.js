@@ -49,5 +49,9 @@ module.exports = function(options) {
 		this.body = player.games;
 	});
 
-	return compose([saveState, getState, getGames]);
+	var getValidator = route.get('/pai-sho/validator', function*() {
+		this.body = validate.toString();
+	});
+
+	return compose([saveState, getState, getGames, getValidator]);
 };
