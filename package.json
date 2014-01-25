@@ -1,0 +1,31 @@
+{
+  "name": "pai-sho",
+  "version": "0.0.0",
+  "description": "pai-sho =======",
+  "main": "index.js",
+  "dependencies": {
+    "co": "~3.0.2",
+    "co-body": "~0.0.1",
+    "co-level": "~1.0.1",
+    "koa": "~0.3.0",
+    "koa-route": "~1.0.2",
+    "koa-session": "~1.2.0",
+    "leveldown": "~0.10.2",
+    "levelup": "~0.18.2",
+    "koa-compose": "~2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BigIroh/pai-sho.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BigIroh/pai-sho/issues"
+  },
+  "homepage": "https://github.com/BigIroh/pai-sho"
+}
