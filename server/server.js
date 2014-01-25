@@ -24,8 +24,9 @@ app.use(route.post('/signup', function*() {
 	var body = yield parse(this);
 	var name = body.name.toString();
 	var password = body.password.toString();
+	var playerExists;
 	try {
-		var playerExists = yield playerDB.get(name);
+		playerExists = yield playerDB.get(name);
 	} catch(e) {
 		console.log(e);
 	}
