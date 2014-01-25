@@ -43,5 +43,11 @@ module.exports = function(options) {
 		}
 	});
 
-	return compose([saveState, getState]);
+	var getGames = route.get('/pai-sho/games', function*() {
+		var player = yield playerDB.get(this.session.player);
+		player = JSON.parse(player);
+		this.body = player.games;
+	});
+
+	return compose([saveState, getState, getGames]);
 };
