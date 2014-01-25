@@ -10,6 +10,8 @@ module.exports = function(options) {
 
 	var gameDB = options.gameDB;
 	var playerDB = options.playerDB;
+
+	var waiting = null;
 	
 	var saveState = route.post('/pai-sho/state', function*() {
 		var body = yield parse(this);
@@ -65,5 +67,5 @@ module.exports = function(options) {
 		this.body = validate.toString();
 	});
 
-	return compose([saveState, getState, getGames, getValidator]);
+	return compose([saveState, getState, getStates, getGames, getValidator]);
 };
