@@ -18,7 +18,7 @@ module.exports = function(options) {
 		console.log(player.games.indexOf(body.game))
 		if(player.games.indexOf(body.game) > -1) {
 			var game = JSON.parse(yield gameDB.get(body.game));
-			var valid = validate(game.currentState, body.state);
+			var valid = validate(game.currentState, body.state, this.session.player);
 			if(valid) {
 				game.states.push(game.currentState);
 				game.currentState = body.state;
