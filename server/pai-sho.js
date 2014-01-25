@@ -7,10 +7,10 @@ var koa = require('koa');
 module.exports = function(options) {
 	var app = koa();
 
-	var validate = options.validate || function*() {
+	var validate = options.validate || function() {
 		return true;
 	};
-	
+
 	var gameDB = options.gameDB;
 	var playerDB = options.playerDB;
 	
@@ -20,7 +20,7 @@ module.exports = function(options) {
 		player = JSON.parse(player);
 		if(player.games.indexOf(body.game) > -1) {
 			var game = JSON.parse(yield gameDB.get(body.game));
-			var valid = yield validate(game.currentState, body.state);
+			var valid = validate(game.currentState, body.state);
 			if(valid) {
 				game.states.push(game.currentState);
 				game.currentState = body.state;
