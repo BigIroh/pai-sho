@@ -1,12 +1,9 @@
+var compose = require('koa-compose');
 var route = require('koa-route');
-var mount = require('koa-mount');
 var parse = require('co-body');
-var koa = require('koa');
 
 
 module.exports = function(options) {
-	var app = koa();
-
 	var validate = options.validate || function() {
 		return true;
 	};
@@ -14,10 +11,11 @@ module.exports = function(options) {
 	var gameDB = options.gameDB;
 	var playerDB = options.playerDB;
 	
-	app.use(route.post('/', function*() {
+	var POST = route.post('/pai-sho', function*() {
 		var body = yield parse(this);
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
+		console.log(player.games.indexOf(body.game))
 		if(player.games.indexOf(body.game) > -1) {
 			var game = JSON.parse(yield gameDB.get(body.game));
 			var valid = validate(game.currentState, body.state);
@@ -32,9 +30,9 @@ module.exports = function(options) {
 		} else {
 			this.status = 205;
 		}
-	}));
+	});
 
-	app.use(route.get('/', function*() {
+	var GET = route.get('/pai-sho', function*() {
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
 		if(player.games.indexOf(this.query.game) > -1) {
@@ -43,7 +41,7 @@ module.exports = function(options) {
 		} else {
 			this.status = 205;
 		}
-	}));
+	});
 
-	return mount('/pai-sho', app);
+	return compose([POST, GET]);
 };

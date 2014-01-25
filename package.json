@@ -12,7 +12,7 @@
     "koa-session": "~1.2.0",
     "leveldown": "~0.10.2",
     "levelup": "~0.18.2",
-    "koa-mount": "~1.2.3"
+    "koa-compose": "~2.2.0"
   },
   "devDependencies": {},
   "scripts": {
