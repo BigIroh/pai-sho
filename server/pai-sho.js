@@ -43,6 +43,18 @@ module.exports = function(options) {
 		}
 	});
 
+	var getStates = route.get('/pai-sho/states', function*() {
+		var player = yield playerDB.get(this.session.player);
+		player = JSON.parse(player);
+		if(player.games.indexOf(this.query.game) > -1) {
+			var game = JSON.parse(yield gameDB.get(this.query.game));
+			game.states.push(game.currentState);
+			this.body = game.states;
+		} else {
+			this.status = 205;
+		}
+	});
+
 	var getGames = route.get('/pai-sho/games', function*() {
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
