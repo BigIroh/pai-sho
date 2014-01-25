@@ -4,6 +4,7 @@ var auth = require('basic-auth');
 var route = require('koa-route');
 var paisho = require('./pai-sho');
 var logger = require('koa-logger');
+var parse = require('co-body');
 
 var co = require('co');
 
@@ -18,6 +19,24 @@ var app = koa();
 app.keys = ['the one ring'];
 app.use(session());
 app.use(logger());
+
+app.use(route.post('/signup', function*() {
+	var body = yield parse(this);
+	var name = body.name.toString();
+	var password = body.password.toString();
+	var user = {
+		name: name,
+		password: password,
+		games: []
+	};
+	var success = yield playerDB.put(name, JSON.stringify(user));
+	if(success) {
+		this.session.player = name;
+		this.status = 500;
+	} else {
+		this.status = 200;
+	}
+}));
 
 app.use(function*(next) {
 	var credentials = auth(this);
