@@ -3,6 +3,8 @@ var session = require('koa-session');
 var auth = require('basic-auth');
 var route = require('koa-route');
 var paisho = require('./pai-sho');
+var logger = require('koa-logger');
+
 var co = require('co');
 
 var level = require('levelup');
@@ -12,8 +14,10 @@ var gameDB = wrap(level('games'));
 var playerDB = wrap(level('players'));
 
 var app = koa();
+
 app.keys = ['the one ring'];
 app.use(session());
+app.use(logger());
 
 app.use(function*(next) {
 	var credentials = auth(this);
