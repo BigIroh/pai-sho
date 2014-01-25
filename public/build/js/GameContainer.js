@@ -5,12 +5,13 @@ var GameContainer = React.createClass({displayName: 'GameContainer',
   },
   componentWillMount: function() {
     function update () {
-      window.requestAnimationFrame(update);
-      if(TicTacToe.game.state.hasChanged) {
-        TicTacToe.game.state.hasChanged = false;
+      window.requestAnimationFrame(update.bind(this));
+      if(TicTacToe.game.stateHasChanged) {
+        TicTacToe.game.stateHasChanged = false;
         this.setState(TicTacToe.game.state);
       } 
     }
+    update.call(this);
   },
   render: function() {
     return (

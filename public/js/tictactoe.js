@@ -32,7 +32,7 @@ TicTacToe.game = new Game({
 		var foundChange;
 		for(var i=0; i<state.board.length; i++) {
 			for(var j=0; j<state.board[0].length; j++) {
-				if(state.board[i][j] !== state.board[i][j]) {
+				if(state.board[i][j] !== next.board[i][j]) {
 					if(foundChange) {
 						throw new Error("You can only move once!");
 					}

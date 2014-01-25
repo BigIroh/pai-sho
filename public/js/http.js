@@ -65,7 +65,7 @@
 	var verbs = ['get', 'post', 'put', 'delete'];
 	verbs.forEach(function (verb) {
 		http[verb] = function (opts) {
-			opts.method = verb;
+			opts.method = verb.toUpperCase();
 			return http.request(opts);
 		}
 	});

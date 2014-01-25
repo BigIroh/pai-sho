@@ -1,12 +1,18 @@
 Object.defineProperty(Object.prototype, 'clone', {
 	value: function () {
-		var result = {};
+		if(Array.isArray(this)) {
+			result = []
+		}
+		else {
+			var result = {};
+		}
+		
 		for(key in this) {
 			var val = this[key];
 
 			//copy array
 			if(Array.isArray(val)) {
-				result[key] = val.slice();
+				result[key] = val.slice().clone();
 			}
 			//prevent weird typeof null == object
 			else if(val === null) {
@@ -35,7 +41,7 @@ Object.defineProperty(Object.prototype, 'absorb', {
 			var next = obj[key];
 			var current = this[key];
 			if(Array.isArray(next)) {
-				this[key] = next.slice();
+				this[key] = next.slice().clone();
 			}
 			else if(next === null) {
 				this[key] = next;

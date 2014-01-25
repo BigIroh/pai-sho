@@ -16,7 +16,7 @@ var GameContainer = React.createClass({displayName: 'GameContainer',
     return (
       React.DOM.div(null, 
         React.DOM.h1(null, "Sexagon: Robots vs Nelf Boobs"),
-        Board( {data:this.state.board})
+        Board({data:this.state.board})
       )
     );
   }

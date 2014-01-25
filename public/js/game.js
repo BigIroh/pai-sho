@@ -84,7 +84,8 @@
 	 * @return {boolean} success: client validates the update?
 	 */
 	Game.prototype.applyStateChange = function (update) {
-		var newState = this.state.clone().absorb(update);
+		var newState = this.state.clone();
+		newState.absorb(update);
 
 		var applyStateError;
 		try {
@@ -97,28 +98,29 @@
 		}
 
 		if(!applyStateError) {
+			this.state = newState;
 			this.history.unverified.push(newState);
-			http.post({
-				url: this.url, 
-				data: update,
-				done: function (status, response) {
-					this.history.unverified.remove(newState);
-					switch(status) {
-						case 200:
-							this.history.verified.push(newState);
-						break;
-						case 205:
-							//reset state, bad update given
-							this.onServerStateRefusal();
-							this.state = response
-						break;
-						default:
-							this.onServerError();
-						break;
+			// http.post({
+			// 	url: this.url, 
+			// 	data: update,
+			// 	done: function (status, response) {
+			// 		this.history.unverified.remove(newState);
+			// 		switch(status) {
+			// 			case 200:
+			// 				this.history.verified.push(newState);
+			// 			break;
+			// 			case 205:
+			// 				//reset state, bad update given
+			// 				this.onServerStateRefusal();
+			// 				this.state = response
+			// 			break;
+			// 			default:
+			// 				this.onServerError();
+			// 			break;
 
-					}
-				}.bind(this)
-			});
+			// 		}
+			// 	}.bind(this)
+			// });
 		}
 		else {
 			this.onBadMove(applyStateError);
