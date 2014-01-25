@@ -1,6 +1,6 @@
 var session = require('koa-session');
 var koa = require('koa');
-var paishow = require('./pai-sho');
+var paisho = require('./pai-sho');
 var app = koa();
 var co = require('co');
 var level = require('levelup');
@@ -16,7 +16,7 @@ app.use(function*(next) {
 	yield next;
 });
 
-app.use(paishow({
+app.use(paisho({
 	gameDB: gameDB,
 	playerDB: playerDB
 }));
