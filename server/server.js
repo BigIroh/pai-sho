@@ -24,17 +24,26 @@ app.use(route.post('/signup', function*() {
 	var body = yield parse(this);
 	var name = body.name.toString();
 	var password = body.password.toString();
-	var user = {
-		name: name,
-		password: password,
-		games: []
-	};
-	var success = yield playerDB.put(name, JSON.stringify(user));
-	if(success) {
-		this.session.player = name;
+	try {
+		var playerExists = yield playerDB.get(name);
+	} catch(e) {
+		console.log(e);
+	}
+	if(playerExists) {
 		this.status = 500;
 	} else {
-		this.status = 200;
+		var user = {
+			name: name,
+			password: password,
+			games: []
+		};
+		var failure = yield playerDB.put(name, JSON.stringify(user));
+		if(failure) {
+			this.status = 500;
+		} else {
+			this.session.player = name;
+			this.status = 200;
+		}
 	}
 }));
 
