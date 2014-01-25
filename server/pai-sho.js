@@ -11,7 +11,7 @@ module.exports = function(options) {
 	var gameDB = options.gameDB;
 	var playerDB = options.playerDB;
 	
-	var POST = route.post('/pai-sho', function*() {
+	var saveState = route.post('/pai-sho/state', function*() {
 		var body = yield parse(this);
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
@@ -32,7 +32,7 @@ module.exports = function(options) {
 		}
 	});
 
-	var GET = route.get('/pai-sho', function*() {
+	var getState = route.get('/pai-sho/state', function*() {
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
 		if(player.games.indexOf(this.query.game) > -1) {
@@ -43,5 +43,5 @@ module.exports = function(options) {
 		}
 	});
 
-	return compose([POST, GET]);
+	return compose([saveState, getState]);
 };
