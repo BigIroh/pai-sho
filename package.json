@@ -12,7 +12,8 @@
     "koa-session": "~1.2.0",
     "leveldown": "~0.10.2",
     "levelup": "~0.18.2",
-    "koa-compose": "~2.2.0"
+    "koa-compose": "~2.2.0",
+    "basic-auth": "0.0.1"
   },
   "devDependencies": {},
   "scripts": {

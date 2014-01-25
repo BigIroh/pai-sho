@@ -1,20 +1,42 @@
-var session = require('koa-session');
 var koa = require('koa');
+var session = require('koa-session');
+var auth = require('basic-auth');
+var route = require('koa-route');
 var paisho = require('./pai-sho');
-var app = koa();
 var co = require('co');
+
 var level = require('levelup');
 var wrap = require('co-level');
+
 var gameDB = wrap(level('games'));
 var playerDB = wrap(level('players'));
 
+var app = koa();
 app.keys = ['the one ring'];
 app.use(session());
 
 app.use(function*(next) {
-	this.session.player = 'cdawg';
-	yield next;
+	var credentials = auth(this);
+	if(credentials) {
+		var user = JSON.parse(yield playerDB.get(credentials.name));
+		if(user && user.password == credentials.pass) {
+			this.session.player = credentials.name;
+			yield next;
+		} else {
+			this.status = 401;
+		}
+	} else {
+		this.status = 401;
+	}
 });
+
+var logout = function*() {
+	this.session = null;
+	this.status = 200;
+};
+
+app.use(route.get('/logout', logout));
+app.use(route.post('/logout', logout));
 
 app.use(paisho({
 	gameDB: gameDB,
@@ -22,7 +44,6 @@ app.use(paisho({
 }));
 
 app.listen(3000);
-
 
 co(function*() {
 	yield gameDB.put('foo', JSON.stringify({
@@ -33,7 +54,8 @@ co(function*() {
 	}));
 	console.log('foo put');
 	yield playerDB.put('cdawg', JSON.stringify({
-		games: ['foo']
+		games: ['foo'],
+		password: 'password'
 	}));
 	console.log('cdawg put');
 })();
