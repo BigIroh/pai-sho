@@ -3,7 +3,11 @@ TicTacToe.X = 'X';
 TicTacToe.O = 'O';
 TicTacToe.EMPTY = '_';
 
-TicTacToe.game = new Game({
+TicTacToe.paisho = new PaiSho({
+	pathname: window.location.pathname,
+});
+
+TicTacToe.paisho.activeGame = new Game({
 	state: {
 		board: [
 			[TicTacToe.EMPTY, TicTacToe.EMPTY, TicTacToe.EMPTY],
@@ -54,3 +58,4 @@ TicTacToe.game = new Game({
 		return true;
 	},
 });
+
