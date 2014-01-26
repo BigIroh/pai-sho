@@ -24,7 +24,7 @@ var line = function(origin, step, board) {
                   y: origin.y + step.y};
     if(inBounds(newPos) && board[newPos.x][newPos.y] === null) {
         var rest = line(newPos, step, board);
-        rest.push(newPos);
+        rest.unshift(newPos);
         return rest;
     }
 
@@ -54,10 +54,10 @@ var range = function(origin, reach, board) {
         if(current in visited || left < 0) {
             continue;
         }
-        var x = current[0];
-        var y = current[1];
+        var x = current.x;
+        var y = current.y;
 
-        if(board[x][y] === null) {
+        if(occupied(board)(current)) {
             ret.push(current);
             var adj = adjacents(current);
             queue = queue.concat(adj);
@@ -68,4 +68,12 @@ var range = function(origin, reach, board) {
     }
 
     return ret;
+}
+
+// tells if origin is occupied in board.
+// curried because fuck you
+var occupied = function(board) {
+    return function(origin) {
+        return board[origin.x][origin.y] != null
+    }
 }
