@@ -14,7 +14,8 @@
     "levelup": "~0.18.2",
     "koa-compose": "~2.2.0",
     "basic-auth": "0.0.1",
-    "koa-logger": "~1.1.1"
+    "koa-logger": "~1.1.1",
+    "koa-static": "~1.4.2"
   },
   "devDependencies": {},
   "scripts": {
