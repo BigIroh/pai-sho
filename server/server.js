@@ -13,6 +13,7 @@ var wrap = require('co-level');
 
 var gameDB = wrap(level('games'));
 var playerDB = wrap(level('players'));
+var paiDB = wrap(level('paisho'));
 
 var app = koa();
 
@@ -72,6 +73,7 @@ app.use(route.get('/logout', logout));
 app.use(route.post('/logout', logout));
 
 app.use(paisho({
+	paiDB: paiDB,
 	gameDB: gameDB,
 	playerDB: playerDB
 }));
@@ -89,6 +91,7 @@ co(function*() {
 	}));
 	console.log('foo put');
 	yield playerDB.put('cdawg', JSON.stringify({
+		name: 'cdawg',
 		games: [{
 			id: 'foo',
 			opponent: 'mscandal'
