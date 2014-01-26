@@ -60,6 +60,12 @@ module.exports = function(options) {
 	var getGames = route.get('/pai-sho/games', function*() {
 		var player = yield playerDB.get(this.session.player);
 		player = JSON.parse(player);
+		for(var index in player.games) {
+			var gameData = player.games[index];
+			var game = JSON.parse(yield gameDB.get(gameData.id));
+			gameData.lastAction = game.lastAction;
+		}
+		console.log(player.games);
 		this.body = player.games;
 	});
 
