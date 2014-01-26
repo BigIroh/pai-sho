@@ -1,9 +1,10 @@
 var koa = require('koa');
 var session = require('koa-session');
+var logger = require('koa-logger');
+var paisho = require('./pai-sho');
+var serve = require('koa-static');
 var auth = require('basic-auth');
 var route = require('koa-route');
-var paisho = require('./pai-sho');
-var logger = require('koa-logger');
 var parse = require('co-body');
 
 var co = require('co');
@@ -20,6 +21,7 @@ var app = koa();
 app.keys = ['the one ring'];
 app.use(session());
 app.use(logger());
+app.use(serve(process.cwd() + '/public'));
 
 app.use(route.post('/signup', function*() {
 	var body = yield parse(this);
