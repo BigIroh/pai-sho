@@ -80,14 +80,19 @@ app.listen(3000);
 
 co(function*() {
 	yield gameDB.put('foo', JSON.stringify({
+		players: ['cdawg', 'mscandal'],
 		currentState: {
 			lol: 1
 		},
-		states: []
+		states: [],
+		lastAction: (new Date()).getTime()
 	}));
 	console.log('foo put');
 	yield playerDB.put('cdawg', JSON.stringify({
-		games: ['foo'],
+		games: [{
+			id: 'foo',
+			opponent: 'mscandal'
+		}],
 		password: 'password'
 	}));
 	console.log('cdawg put');
